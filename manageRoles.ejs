@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+<div class="container mt-5">
+  <h1 class="mb-4">Manage Roles</h1>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Add New Role</h5>
+      <form action="/admin/add-role" method="POST">
+        <div class="mb-3">
+          <label for="roleName" class="form-label">Role Name</label>
+          <input type="text" class="form-control" id="roleName" name="roleName" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Role</button>
+      </form>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Existing Roles</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Role Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% roles.forEach(role => { %>
+            <tr>
+              <td><%= role.id %></td>
+              <td><%= role.name %></td>
+              <td>
+                <a href="/admin/edit-role/<%= role.id %>" class="btn btn-sm btn-primary">Edit</a>
+                <a href="/admin/delete-role/<%= role.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <a href="/admin" class="btn btn-secondary mt-3">Back to Admin Panel</a>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>
