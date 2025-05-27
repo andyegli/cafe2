@@ -1,7 +1,7 @@
 //Node.js cafe web application
 //Author: Chathuni Wahalathantri
 //Date created: 14 February 2024
-//Updated: May 27, 2025 (Added user/product management, email as user key, menu table, duplicate check)
+//Updated: May 27, 2025 (Added user/product management, email as user key, menu table, custom food_type)
 
 // Include required modules
 var express = require('express');
@@ -181,20 +181,32 @@ app.post('/admin/add-user', isAdmin, (req, res) => {
     console.log('Entering /admin/add-user route', req.body);
     const { username, email, password, role } = req.body;
     if (username && email && password && role) {
-        const sql = `INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`;
-        console.log('Executing query:', sql, [username, email, password, role]);
-        conn.query(sql, [username, email, password, role], (err, result) => {
+        const checkSql = `SELECT email FROM users WHERE email = ?`;
+        console.log('Executing check query:', checkSql, [email]);
+        conn.query(checkSql, [email], (err, results) => {
             if (err) {
-                console.error('Query error:', err);
-                if (err.code === 'ER_DUP_ENTRY') {
-                    console.log('Duplicate email detected');
-                    return res.redirect('/admin/user-management?error=duplicate');
-                }
+                console.error('Check query error:', err);
                 return res.status(500).send('Server Error');
             }
-            console.log('Query result: User added', { username, email, role });
-            res.redirect('/admin/user-management');
-            console.log('Redirecting to /admin/user-management');
+            if (results.length > 0) {
+                console.log('Duplicate email detected:', email);
+                return res.redirect('/admin/user-management?error=duplicate');
+            }
+            const sql = `INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`;
+            console.log('Executing insert query:', sql, [username, email, password, role]);
+            conn.query(sql, [username, email, password, role], (err, result) => {
+                if (err) {
+                    console.error('Insert query error:', err);
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        console.log('Duplicate email detected (race condition):', email);
+                        return res.redirect('/admin/user-management?error=duplicate');
+                    }
+                    return res.status(500).send('Server Error');
+                }
+                console.log('Query result: User added', { username, email, role });
+                res.redirect('/admin/user-management');
+                console.log('Redirecting to /admin/user-management');
+            });
         });
     } else {
         console.log('Missing fields in add-user:', req.body);
@@ -205,17 +217,26 @@ app.post('/admin/add-user', isAdmin, (req, res) => {
 // Edit User route
 app.post('/admin/edit-user/:email', isAdmin, (req, res) => {
     console.log('Entering /admin/edit-user route', { email: req.params.email, body: req.body });
-    const { username, role } = req.body;
+    const { username, role, password } = req.body;
     const email = req.params.email;
     if (username && role) {
-        const sql = `UPDATE users SET username = ?, role = ? WHERE email = ?`;
-        console.log('Executing query:', sql, [username, role, email]);
-        conn.query(sql, [username, role, email], (err, result) => {
+        let sql, params;
+        if (password) {
+            // Update password if provided
+            sql = `UPDATE users SET username = ?, role = ?, password = ? WHERE email = ?`;
+            params = [username, role, password, email];
+        } else {
+            // Skip password update if not provided
+            sql = `UPDATE users SET username = ?, role = ? WHERE email = ?`;
+            params = [username, role, email];
+        }
+        console.log('Executing query:', sql, params);
+        conn.query(sql, params, (err, result) => {
             if (err) {
                 console.error('Query error:', err);
                 return res.status(500).send('Server Error');
             }
-            console.log('Query result: User updated', { email, username, role, affectedRows: result.affectedRows });
+            console.log('Query result: User updated', { email, username, role, passwordUpdated: !!password, affectedRows: result.affectedRows });
             res.redirect('/admin/user-management');
             console.log('Redirecting to /admin/user-management');
         });
@@ -245,26 +266,38 @@ app.get('/admin/delete-user/:email', isAdmin, (req, res) => {
 // Product Management route
 app.get('/admin/product-management', isAdmin, (req, res) => {
     console.log('Entering /admin/product-management route');
-    const sql = 'SELECT food_id AS id, food_name AS name, price, food_type AS category FROM menu';
-    console.log('Executing query:', sql);
-    conn.query(sql, (err, products) => {
+    // Fetch products
+    const productSql = 'SELECT food_id AS id, food_name AS name, price, food_type AS category FROM menu';
+    console.log('Executing product query:', productSql);
+    conn.query(productSql, (err, products) => {
         if (err) {
-            console.error('Query error:', err);
+            console.error('Product query error:', err);
             return res.status(500).send('Server Error');
         }
         console.log('Query result: Fetched products', products);
-        const error = req.query.error;
-        res.render('productManagement', { products, error });
-        console.log('Rendered productManagement view', { error });
+        // Fetch distinct food_type values
+        const typeSql = 'SELECT DISTINCT food_type FROM menu WHERE food_type IS NOT NULL';
+        console.log('Executing type query:', typeSql);
+        conn.query(typeSql, (err, types) => {
+            if (err) {
+                console.error('Type query error:', err);
+                return res.status(500).send('Server Error');
+            }
+            const foodTypes = types.map(type => type.food_type);
+            console.log('Query result: Fetched food types', foodTypes);
+            const error = req.query.error;
+            res.render('productManagement', { products, foodTypes, error });
+            console.log('Rendered productManagement view', { error });
+        });
     });
 });
 
 // Add Product route
 app.post('/admin/add-product', isAdmin, (req, res) => {
     console.log('Entering /admin/add-product route', req.body);
-    const { name, price, category } = req.body;
-    if (name && price && category) {
-        // Check for existing product name
+    const { name, price, category, customCategory } = req.body;
+    const finalCategory = category === 'Other' ? customCategory : category;
+    if (name && price && finalCategory) {
         const checkSql = `SELECT food_name FROM menu WHERE food_name = ?`;
         console.log('Executing check query:', checkSql, [name]);
         conn.query(checkSql, [name], (err, results) => {
@@ -277,8 +310,8 @@ app.post('/admin/add-product', isAdmin, (req, res) => {
                 return res.redirect('/admin/product-management?error=duplicate');
             }
             const sql = `INSERT INTO menu (food_name, price, food_type) VALUES (?, ?, ?)`;
-            console.log('Executing insert query:', sql, [name, parseFloat(price), category]);
-            conn.query(sql, [name, parseFloat(price), category], (err, result) => {
+            console.log('Executing insert query:', sql, [name, parseFloat(price), finalCategory]);
+            conn.query(sql, [name, parseFloat(price), finalCategory], (err, result) => {
                 if (err) {
                     console.error('Insert query error:', err);
                     if (err.code === 'ER_DUP_ENTRY') {
@@ -287,7 +320,7 @@ app.post('/admin/add-product', isAdmin, (req, res) => {
                     }
                     return res.status(500).send('Server Error');
                 }
-                console.log('Query result: Product added', { name, price, category, insertId: result.insertId });
+                console.log('Query result: Product added', { name, price, category: finalCategory, insertId: result.insertId });
                 res.redirect('/admin/product-management');
                 console.log('Redirecting to /admin/product-management');
             });
@@ -301,10 +334,10 @@ app.post('/admin/add-product', isAdmin, (req, res) => {
 // Edit Product route
 app.post('/admin/edit-product/:id', isAdmin, (req, res) => {
     console.log('Entering /admin/edit-product route', { id: req.params.id, body: req.body });
-    const { name, price, category } = req.body;
+    const { name, price, category, customCategory } = req.body;
     const id = req.params.id;
-    if (name && price && category) {
-        // Check for existing product name (excluding current product)
+    const finalCategory = category === 'Other' ? customCategory : category;
+    if (name && price && finalCategory) {
         const checkSql = `SELECT food_name FROM menu WHERE food_name = ? AND food_id != ?`;
         console.log('Executing check query:', checkSql, [name, id]);
         conn.query(checkSql, [name, id], (err, results) => {
@@ -317,8 +350,8 @@ app.post('/admin/edit-product/:id', isAdmin, (req, res) => {
                 return res.redirect('/admin/product-management?error=duplicate');
             }
             const sql = `UPDATE menu SET food_name = ?, price = ?, food_type = ? WHERE food_id = ?`;
-            console.log('Executing update query:', sql, [name, parseFloat(price), category, id]);
-            conn.query(sql, [name, parseFloat(price), category, id], (err, result) => {
+            console.log('Executing update query:', sql, [name, parseFloat(price), finalCategory, id]);
+            conn.query(sql, [name, parseFloat(price), finalCategory, id], (err, result) => {
                 if (err) {
                     console.error('Update query error:', err);
                     if (err.code === 'ER_DUP_ENTRY') {
@@ -327,7 +360,7 @@ app.post('/admin/edit-product/:id', isAdmin, (req, res) => {
                     }
                     return res.status(500).send('Server Error');
                 }
-                console.log('Query result: Product updated', { id, name, price, category, affectedRows: result.affectedRows });
+                console.log('Query result: Product updated', { id, name, price, category: finalCategory, affectedRows: result.affectedRows });
                 res.redirect('/admin/product-management');
                 console.log('Redirecting to /admin/product-management');
             });
