@@ -1,0 +1,184 @@
+h1 {
+    color:blueviolet;
+}
+
+.img {
+    float:right;
+    max-width:500px;
+    margin-left:30px;
+}
+
+.img1 {
+    float:left;
+    max-width:150px;
+    margin-left:5px;
+}
+
+.footer {
+    margin-top:400px;
+}
+
+.container1 {
+    text-align:center;
+    margin-top:10px;
+    border-style:solid;
+    border-color:goldenrod;
+    border-width:2px;
+    margin-right:500px;
+    margin-left:500px;
+    margin-top:50px;
+}
+
+h3 {
+    color:blueviolet;
+}
+
+table {
+    border:1px solid;
+    width:100%;
+    text-align:center;
+}
+
+th {
+    border:1px solid; 
+    font-size:20px;
+}
+td {
+    border:1px solid;
+}
+
+.copyright {
+    margin-left:570px;
+}
+
+.footer1 {
+    margin-top:50px;
+}
+
+.login {
+    text-align: center;
+    border: 2px solid goldenrod;
+    margin: 100px auto; /* Centers the element horizontally */
+    width: 50%; /* Adjust the width as per your design */
+    max-width: 400px; /* Ensures it doesn't stretch too much on large screens */
+    padding: 20px; /* Adds inner space */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow for better aesthetics */
+    border-radius: 10px; /* Rounds the corners */
+    background-color: #f9f9f9; /* Adds a light background */
+}
+
+.register {
+    text-align:center;
+    border-style:solid;
+    border-color:goldenrod;
+    border-width: 2px;
+    margin-right:500px;
+    margin-left:500px ;
+    margin-top: 100px;
+}
+
+#password {
+    margin-left:5px;
+}
+
+.member {
+    margin-left:50px;
+}
+
+.footer2 {
+    margin-top:200px;
+}
+
+.coffee {
+    margin-bottom:20px;
+}
+
+.img2 {
+    float:left;
+    max-width:250px;
+}
+
+.c {
+    margin-left:80px;
+}
+
+.img3 {
+    float:right;
+    max-width:150px;
+    margin-right:700px;
+}
+
+.h {
+    margin-left:475px;
+    margin-top: 10px;
+}
+
+.order {
+    margin-left:50px;
+}
+
+.footer3 {
+    margin-top:100px;
+}
+
+#name {
+    margin-left:45px;
+}
+
+#email {
+    margin-left:50px;
+}
+
+#type {
+    margin-left:15px;
+}
+
+#food {
+    margin-left:15px;
+}
+
+#quantity {
+    margin-left:25px;
+}
+
+.footer4 {
+    margin-top:150px;
+}
+
+.img4 {
+    float:left;
+    max-width:250px;
+}
+
+.img5 {
+    float:right;
+    max-width:300px;
+    margin-right:600px; 
+}
+
+.g {
+    margin-left:85px;
+}
+
+.e {
+    margin-left:510px;
+}
+
+.img6 {
+    float:left;
+    max-width:250px;
+}
+
+.img7 {
+    float:right;
+    max-width:200px;
+    margin-right:700px;  
+}
+
+.f {
+    margin-left:80px;
+}
+
+.p {
+    margin-left:460px; 
+}

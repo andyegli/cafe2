@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <%- include('partials/header.ejs') %>
+        <style>
+            .admin-dashboard {
+                margin: 20px;
+                font-family: Arial, sans-serif;
+            }
+            .dashboard-section {
+                margin-bottom: 40px;
+            }
+            .section-title {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+            .action-button {
+                display: inline-block;
+                padding: 10px 15px;
+                margin: 5px;
+                background-color: #007BFF;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+            .action-button:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+
+    <body>
+        <%- include('partials/navbar2.ejs') %>
+        <div class="admin-dashboard">
+            <h1>Admin Dashboard</h1>
+            <p>Welcome, Admin: <span style="color: green; font-weight: bold;"><%=adminEmail%></span></p>
+            <p>You have full access to manage the platform.</p>
+            
+            <!-- User Management Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">User Management</h2>
+                <p>Manage registered users on the platform:</p>
+                <a href="/admin/view-users" class="action-button">View Users</a>
+                <a href="/admin/add-user" class="action-button">Add User</a>
+                <a href="/admin/manage-roles" class="action-button">Manage Roles</a>
+            </div>
+
+            <!-- Product Management Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Product Management</h2>
+                <p>Manage the items available on the platform:</p>
+                <a href="/admin/view-products" class="action-button">View Products</a>
+                <a href="/admin/add-product" class="action-button">Add Product</a>
+                <a href="/admin/edit-products" class="action-button">Edit Products</a>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Analytics</h2>
+                <p>View platform performance and usage statistics:</p>
+                <a href="/admin/sales-analytics" class="action-button">Sales Analytics</a>
+                <a href="/admin/user-activity" class="action-button">User Activity</a>
+            </div>
+        </div>
+        
+        <div class="footer2">
+            <%- include('partials/footer.ejs') %>
+        </div>
+    </body>    
+</html>

@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <%- include('partials/header.ejs') %>
+    </head>
+    
+    <body>
+        <%- include('partials/navbar2.ejs') %>
+        <div class="order">
+            <h1>Order</h1>
+            <br>
+            <form method="POST">
+                <label for="prefName">Preferred Name:</label>
+                <input type="text" id="prefName" placeholder="Enter Preferred Name" name="prefName">
+                <br><br>
+                <label for="type">Food Type:</label>
+                <select name="type" id="type">
+                    <option value="coffee">Coffee</option>
+                    <option value="tea">Tea</option>
+                    <option value="savoury treats">Savoury Treats</option>
+                </select>
+                <br><br>
+                <label for="food">Food Item:</label>
+                <select name="food" id="food">
+                    <% for (let i=0; i < menuData.length; i++) { %>
+                      <option value='<%= menuData[i].food_name %>'><%= menuData[i].food_name %></option>
+                    <% } %>
+                </select>
+                <br><br>
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="0.00" max="100">
+                <br><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="footer3">
+            <%- include('partials/footer.ejs') %>
+        </div>
+        
+    </body>
+</html>
+
+

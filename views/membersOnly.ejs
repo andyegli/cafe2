@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <%- include('partials/header.ejs') %>
+    </head>
+
+    <body>
+        <%- include('partials/navbar2.ejs') %>
+        <div class="member">
+            <h1>Registered users only page</h1>
+			<p style="color: green; font-weight: bold;"><%=memberEmail%></p>
+			<p>You are now logged in.</p>
+            <p>The most popular food items are,</p>
+            <br>
+            <h4>Coffee</h4>
+            <br>
+            <div class="coffee">
+                <img class="img2" src="/public/images/cappuccino.jpg" alt="Coffee">
+                <img class="img3" src="/public/images/hotChocolate.jpg" alt="Coffee">
+                <br><br><br><br><br><br><br><br>
+                <p class="c">Cappuccino</p>
+                <p class="h">Hot Chocolate</p>
+            </div>
+            <br>
+            <h4>Tea</h4>
+            <br>
+            <div class="tea">
+                <img class="img4" src="/public/images/greentea.jpg" alt="Tea">
+                <img class="img5" src="/public/images/earlgreytea.jpg" alt="Tea">
+                <br><br><br><br><br><br><br><br>
+                <p class="g">Green Tea</p>
+                <p class="e">Earl Grey Tea</p>
+            </div>
+            <br>
+            <h4>Savoury Treats</h4>
+            <br>
+            <div class="savoury">
+                <img class="img6" src="/public/images/fishroll.jpg" alt="Savoury">
+                <img class="img7" src="/public/images/eggpastry.jpg" alt="Savoury">
+                <br><br><br><br><br><br><br><br>
+                <p class="f">Fish Roll</p>
+                <p class="p">Egg Pastry</p>
+            </div>
+        </div>
+        
+        <div class="footer2">
+            <%- include('partials/footer.ejs') %>
+        </div>
+    </body>    
+</html>
+

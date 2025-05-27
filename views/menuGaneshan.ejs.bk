@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('partials/header.ejs') %>
+</head>
+<body>
+    <%- include('partials/navbar1.ejs') %>
+    <div class="container">
+        <h1>Menu</h1>
+        <form action="/checkout" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Menu Item Number</th>
+                        <th>Menu Item</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (menuData.length != 0) { var i = 1; menuData.forEach(function (data) { %>
+                        <tr>
+                            <td><%= data.foodID %></td>
+                            <td><%= data.foodName %></td>
+                            <td>$ <%= data.price.toFixed(2) %></td>
+                            <td>
+
+                               <select name="quantity_<%= data.foodID %>" id="quantity_<%= data.foodID %>" onchange="updateTotal(<%= data.price %>, '<%= data.foodID %>')"> 
+                                    <option value="1">Add</option>
+                                    <option value="-1">Reduce</option>
+                                </select>
+<input type="button" value="+" onclick="updateTotal(<%= data.price %>, '<%= data.foodID %>')"/>
+<input type="button" value="-" onclick="updateTotal(<%= data.price %>, '<%= data.foodID %>')"/>
+
+                            </td>
+                        </tr>
+                    <% i++; }) %> <% } %>
+                </tbody>
+            </table>
+
+            <br><br>
+            <p id="totalBill">Total Bill: $0.00</p>
+
+            <div>
+               // <button type="submit">Confirm order</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+		var totalBill = 0;
+        function updateTotal(price, foodID) {
+            
+            totalBill += price; // * quantity;
+            document.getElementById('totalBill').innerText = 'Total Bill: $' + totalBill.toFixed(2);
+        }
+
+        // Initialize total bill (optional)
+        updateTotal(0, ''); // Set initial value
+    </script>
+	
+	<%- include('partials/footer.ejs') %>
+</body>
+</html>
+
+

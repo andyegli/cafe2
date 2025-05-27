@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <%- include('partials/header.ejs') %>
+        <style>
+            .customer-dashboard {
+                margin: 20px;
+                font-family: Arial, sans-serif;
+            }
+            .dashboard-section {
+                margin-bottom: 40px;
+            }
+            .section-title {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+            .action-button {
+                display: inline-block;
+                padding: 10px 15px;
+                margin: 5px;
+                background-color: #28A745;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+            .action-button:hover {
+                background-color: #218838;
+            }
+        </style>
+    </head>
+
+    <body>
+        <%- include('partials/navbar2.ejs') %>
+        <div class="customer-dashboard">
+            <h1>Customer Dashboard</h1>
+            <p>Welcome, Customer: <span style="color: green; font-weight: bold;"><%=memberEmail%></span></p>
+            <p>Explore and manage your account, orders, and preferences.</p>
+            
+            <!-- Account Management Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Account Management</h2>
+                <p>Manage your account details:</p>
+                <a href="/customer/view-account" class="action-button">View Account</a>
+                <a href="/customer/edit-account" class="action-button">Edit Account</a>
+                <a href="/customer/change-password" class="action-button">Change Password</a>
+            </div>
+
+            <!-- Orders Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Orders</h2>
+                <p>View and manage your orders:</p>
+                <a href="/customer/view-orders" class="action-button">View Orders</a>
+                <a href="/customer/track-order" class="action-button">Track Order</a>
+                <a href="/customer/request-refund" class="action-button">Request Refund</a>
+            </div>
+
+            <!-- Preferences Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Preferences</h2>
+                <p>Customize your experience:</p>
+                <a href="/customer/manage-notifications" class="action-button">Manage Notifications</a>
+                <a href="/customer/manage-subscriptions" class="action-button">Manage Subscriptions</a>
+            </div>
+        </div>
+        
+        <div class="footer2">
+            <%- include('partials/footer.ejs') %>
+        </div>
+    </body>    
+</html>

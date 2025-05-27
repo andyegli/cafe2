@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <%- include('partials/header.ejs') %>
+    </head>
+    <body>
+        <%- include('partials/navbar1.ejs') %>
+        <div class="container">
+            <h1>Menu</h1>
+            <table>
+                <th>Food Id</th>
+                <th>Food Type</th>
+                <th>Food Name</th>
+                <th>Price</th>
+            
+                </tr>
+                    <% if (menuData.length !=0) {var i=1; menuData.forEach( function(data){
+                    %>
+                <tr>
+                    <td><%=data.food_id %></td>
+                    <td><%=data.food_type %></td>
+                    <td><%=data.food_name %></td>
+                    <td>$ <%=data.price.toFixed(2) %></td>
+                </tr>
+            
+                <% i++; }) %> <%}%>
+            
+            </table>
+        </div>
+        <div class="footer1">
+            <%- include('partials/footer.ejs') %>
+        </div>
+        
+    </body>
+</html>
+
+

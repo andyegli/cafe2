@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <%- include('partials/header.ejs') %>
+        <style>
+            .guest-dashboard {
+                margin: 20px;
+                font-family: Arial, sans-serif;
+            }
+            .dashboard-section {
+                margin-bottom: 40px;
+            }
+            .section-title {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+            .action-button {
+                display: inline-block;
+                padding: 10px 15px;
+                margin: 5px;
+                background-color: #17A2B8;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+            .action-button:hover {
+                background-color: #117a8b;
+            }
+        </style>
+    </head>
+
+    <body>
+        <%- include('partials/navbar2.ejs') %>
+        <div class="guest-dashboard">
+            <h1>Guest Dashboard</h1>
+            <p>Welcome, Guest! Explore our platform and learn more about what we offer.</p>
+            
+            <!-- Explore Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Explore</h2>
+                <p>Discover our services and products:</p>
+                <a href="/guest/view-products" class="action-button">View Products</a>
+                <a href="/guest/view-categories" class="action-button">Explore Categories</a>
+            </div>
+
+            <!-- Learn More Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Learn More</h2>
+                <p>Get insights into our platform:</p>
+                <a href="/guest/about-us" class="action-button">About Us</a>
+                <a href="/guest/contact-us" class="action-button">Contact Us</a>
+                <a href="/guest/faqs" class="action-button">FAQs</a>
+            </div>            
+        </div>
+        
+        <div class="footer2">
+            <%- include('partials/footer.ejs') %>
+        </div>
+    </body>    
+</html>

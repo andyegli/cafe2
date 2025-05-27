@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('partials/header.ejs') %>
+</head>
+<body>
+    <%- include('partials/navbar1.ejs') %>
+    <div class="container">
+        <h1>Menu</h1>
+        <form action="/checkout" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Menu Item Number</th>
+                        <th>Menu Item</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (menuData.length != 0) { var i = 1; menuData.forEach(function (data) { %>
+                        <tr>
+                            <td><%= data.foodID %></td>
+                            <td><%= data.foodName %></td>
+                            <td>$ <%= data.price.toFixed(2) %></td>
+                            <td>
+							
+<output name="qty_<%= data.foodID %>" id="qty_<%= data.foodID %>">0</output>							
+<input type="button" value="+" onclick="increase(<%= data.price %>, '<%= data.foodID %>')"/>
+<input type="button" value="-" onclick="decrease(<%= data.price %>, '<%= data.foodID %>')"/>
+
+                            </td>
+                        </tr>
+                    <% i++; }) %> <% } %>
+                </tbody>
+            </table>
+
+            <br><br>
+            <p id="totalBill">Total Bill: $0.00</p>
+<button type="button" id="order" value="Place Order" onclick="placeOrder();"/>Place Order</button>
+            <div>
+
+            </div>
+        </form>
+    </div>
+
+    <script>
+		var totalBill = 0;
+		var quantity = 0;
+        function increase(price, foodID) {
+			var quantity = parseInt(document.getElementById('qty_' + foodID).value);
+            totalBill += price; // * quantity
+			quantity++;
+            document.getElementById('qty_' + foodID).innerText = quantity; // Update the dropdown value
+            document.getElementById('totalBill').innerText = 'Total Bill: $' + totalBill.toFixed(2);
+        }
+		
+		function decrease(price, foodID) {
+			var quantity = parseInt(document.getElementById('qty_' + foodID).value);
+            if (quantity > 0) {
+			totalBill -= price; // * quantity
+			quantity--;
+            document.getElementById('qty_' + foodID).innerText = quantity; // Update the dropdown value
+            document.getElementById('totalBill').innerText = 'Total Bill: $' + totalBill.toFixed(2);
+			}
+        }
+		
+		function placeOrder() {
+		document.getElementById('order').innerText ='Thank you for your custom.';
+		}
+
+        // Initialize total bill (optional)
+        TotalBill(0, ''); // Set initial value
+    </script>
+	
+	<%- include('partials/footer.ejs') %>
+</body>
+</html>
+
+
